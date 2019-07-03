@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class UVA {
     
-//  	Runtime error
+//  	Accepted (Run Time 1.430s)
     
     static HashMap<Long, Long> save;
 
