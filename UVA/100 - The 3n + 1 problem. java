@@ -1,46 +1,65 @@
+package uva;
+
+import java.util.HashMap;
 import java.util.Scanner;
 
-//	Runtime error
-
 public class UVA {
+    
+//  	Runtime error
+    
+    static HashMap<Long, Long> save;
+
 
     public static void main(String[] args) {
-        // TODO code application logic here
+        
+        save = new HashMap<Long, Long>();
         
         Scanner kb = new Scanner(System.in);
         
-        while(true){
-            int i = kb.nextInt();
-            int j = kb.nextInt();
+        
+        
+        while(kb.hasNextLine()){
+            long i = kb.nextLong();
+            long j = kb.nextLong();
                         
             ThreeNPlusProblem(i,j);
         }
     }
     
     
-    private static void ThreeNPlusProblem(int i, int j){
+    private static void ThreeNPlusProblem(long i, long j){
     
-        //basic Solve
-        int max = 1;
-        
-        for(int n=i; n<=j; n++){
-            int this_max = 1;
-            int m = n;
-            while(m != 1){
-                if(m%2 == 0){
-                    m = m/2;
-                }else{
-                    m = 3*m + 1;
-                }
+        if(i>=0 && j<=1000000){
+            long max = 1;
+
+            for(long n=i; n<=j; n++){
+                long this_max = 1;
+                long m = n;
                 
-                this_max++;
+                while(m != 1){
+                    if(save.containsKey(m)){
+                        this_max = save.get(m);
+                        break;
+                    }else{
+                        if(m%2 == 0){
+                        m = m/2;
+                        }else{
+                            m = (3*m) + 1;
+                        }                
+                        this_max++;
+                    }
+                    
+                }
+                //System.out.println(n+" : "+this_max);
+
+                if(this_max > max){
+                    max = this_max;
+                }
+                save.put(m, this_max);
             }
             
-            if(this_max > max){
-                max = this_max;
-            }
+            System.out.println(i +" "+ j+ " "+ max);
         }
         
-        System.out.println(i +" "+ j+ " "+ max);
     }
 }
