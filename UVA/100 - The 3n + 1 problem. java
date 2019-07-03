@@ -14,11 +14,10 @@ public class UVA {
         
         save = new HashMap<Long, Long>();
         
-        Scanner kb = new Scanner(System.in);
+        Scanner kb = new Scanner(System.in);      
         
         
-        
-        while(kb.hasNextLine()){
+        while(kb.hasNext()){
             long i = kb.nextLong();
             long j = kb.nextLong();
                         
@@ -27,7 +26,16 @@ public class UVA {
     }
     
     
-    private static void ThreeNPlusProblem(long i, long j){
+    public static void ThreeNPlusProblem(long i, long j){
+        
+        long i2 = i;
+        long j2 = j;
+        
+        if(i > j){
+            long fuck = i;
+            i = j;
+            j = fuck;
+        }
     
         if(i>=0 && j<=1000000){
             long max = 1;
@@ -58,7 +66,7 @@ public class UVA {
                 save.put(m, this_max);
             }
             
-            System.out.println(i +" "+ j+ " "+ max);
+            System.out.println(i2 +" "+ j2+ " "+ max);
         }
         
     }
