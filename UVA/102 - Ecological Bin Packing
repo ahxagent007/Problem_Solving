@@ -1,0 +1,82 @@
+package ecological.bin.packing;
+
+import java.util.Scanner;
+
+
+public class EcologicalBinPacking {
+
+
+    public static void main(String[] args) {
+        
+        Scanner kb = new Scanner(System.in);
+        int n = 3;
+        String[] color = {"B", "C", "G"};
+        
+
+        while(kb.hasNext()){
+            int box[][] = new int[n][n];          
+            int[] left = {-1, -1, -1};
+            
+            for(int i=0; i<n; i++){
+                for(int j=0;j<n;j++){
+                    box[i][j] = kb.nextInt();
+                }
+            }
+            
+            for(int i=0; i<n; i++){
+                int fuck = box[i][1];
+                box[i][1] = box[i][2];
+                box[i][2] = fuck;
+            }
+
+            int value = 0;
+            String ans = "";
+            
+            for(int i=0;i<n; i++){
+                int index = -1;
+                int c_min = Integer.MAX_VALUE;
+                
+                int x = i;
+                for(int j=0;j<n;j++){
+                    //x==0
+                    if(left[j] == -1){
+                        int a = (x+1)%3;
+                        int b = j;
+                        int c = (x+2)%3;
+
+                        int temp = box[a][b] + box[c][b];
+
+                        //System.out.println("("+a+" "+b+") ("+c+" "+b+") FOR COLOR "+color[j]+ " sum = "+temp );
+
+                        if(temp < c_min){
+                            c_min = temp;
+                            index = j;
+                        }
+                    }                                        
+                    
+                }
+                
+                value += c_min;
+                //System.out.println("c_min = "+c_min+" "+color[index]);
+                ans += color[index];
+                left[index] = 69;
+                
+                
+            }
+            
+            System.out.println(ans+" "+value);
+            
+            
+        }
+        
+    }
+    
+}
+/*input 
+
+1 2 3 4 5 6 7 8 9
+5 10 5 20 10 5 10 20 10
+
+*/
+
+/* NOT ALPHABETICALLY */
