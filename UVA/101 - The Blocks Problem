@@ -1,5 +1,6 @@
-//Working on it
+//Working on it v2
 package theblocksproblem;
+
 
 import java.util.Scanner;
 
@@ -12,9 +13,11 @@ public class TheBlocksProblem {
          int n = kb.nextInt();
          
          Block[] blocks = new Block[n];
+         Place[] places = new Place[n];
          
          for(int i=0;i<n;i++){
              blocks[i] = new Block(i);
+             places[i] = new Place(i, i);
          }
 
          
@@ -29,13 +32,13 @@ public class TheBlocksProblem {
                 int b = kb.nextInt();
                 
                 if(SC.equals("onto")){
-                    moveAontoB(blocks, a, b);
-                    printAnswer(blocks);
+                    moveAontoB(places, blocks, a, b);
+                    printAnswer(places, blocks);
                     //printCheck(blocks);
 
                 }else if(SC.equals("over")){
-                    moveAoverB(blocks, a, b);
-                    printAnswer(blocks);
+                    moveAoverB(places, blocks, a, b);
+                    printAnswer(places, blocks);
                     //printCheck(blocks);
                 }
             }else if(FC.equals("pile")){
@@ -46,17 +49,17 @@ public class TheBlocksProblem {
                 
                 if(SC.equals("onto")){
                     
-                    pileAontoB(blocks, a, b);
-                    printAnswer(blocks);
+                    pileAontoB(places, blocks, a, b);
+                    printAnswer(places, blocks);
                     //printCheck(blocks);
                 }else if(SC.equals("over")){
                     
-                    pileAoverB(blocks, a, b);
-                    printAnswer(blocks);
+                    pileAoverB(places, blocks, a, b);
+                    printAnswer(places, blocks);
                     //printCheck(blocks);
                 }
             }else if(FC.equals("quit")){
-                printAnswer(blocks);
+                printAnswer(places, blocks);
                 break;
             }
          
@@ -64,61 +67,102 @@ public class TheBlocksProblem {
         
     }
      
-    public static void returnAllInitial(Block[] blocks, int name){
-        if(blocks[name].hasNext()){           
-            returnAllInitial(blocks, blocks[name].next());
-        }
+    public static void returnAllInitial(Place[] place, Block[] blocks, int p){
         
+        
+        /*if(blocks[name].hasNext()){           
+            returnAllInitial(place, blocks, blocks[name].next());
+        }
+        place[name].setTail(name);
         blocks[name].setHead(name);
-        blocks[name].setTail(-1);
+        blocks[name].setTail(-1);*/
+        
+        if(place[p].hasNext()){
+        
+            int x = place[p].next();
+            
+            while(true){
+                blocks[x].setHead(x);
+                
+                int temp = x;
+                    
+                if(blocks[x].hasNext()){
+                    x = blocks[x].next();                  
+                }else{
+                    blocks[temp].setTail(-1);
+                    break;
+                }
+                
+                
+            }
+            
+        }
     }
     
-    public static void moveAontoB(Block[] blocks, int a, int b){
+    public static void moveAontoB(Place[] place, Block[] blocks, int a, int b){
         
-        returnAllInitial(blocks, a);
-        returnAllInitial(blocks, b);
+        returnAllInitial(place, blocks, a);
+        returnAllInitial(place, blocks, b);
         
+        if(blocks[a].getHead() == a ){
+            place[a].setTail(-1);
+        }
         blocks[b].setTail(a);
         blocks[a].setHead(b);        
         
     }
     
     
-    public static void moveAoverB(Block[] blocks, int a, int b){
-        returnAllInitial(blocks, a);
+    public static void moveAoverB(Place[] place,Block[] blocks, int a, int b){
+        returnAllInitial(place, blocks, a);
         
-        int x = b;
-        while(true){
-            if(blocks[x].hasNext()){
-                x = blocks[x].next();
-            }else{
-                blocks[x].setTail(a);
-                blocks[a].setHead(x);
-                
-                break;
+        if(place[b].hasNext()){
+            int x = place[b].next();
+            while(true){
+                if(blocks[x].hasNext()){
+                    x = blocks[x].next();
+                }else{
+                    blocks[x].setTail(a);
+                    blocks[a].setHead(x);
+                    place[a].setTail(-1);
+                    break;
+                }
             }
+        }else{
+            place[b].setTail(a);
+            blocks[a].setHead(b);
+            place[a].setTail(-1);
         }
+        
     }
     
     
-    public static void pileAontoB(Block[] blocks, int a, int b){
+    public static void pileAontoB(Place[] place,Block[] blocks, int a, int b){
         
-        if(blocks[b].getHead() != b){
+        /*if(blocks[b].getHead() != b){
             blocks[blocks[b].getHead()].setTail(-1);
             blocks[b].setHead(b);
-            returnAllInitial(blocks, b);
+            returnAllInitial(place, blocks, b);
         }else{
-            returnAllInitial(blocks, b);
+            returnAllInitial(place, blocks, b);
         }
         blocks[blocks[a].getHead()].setTail(-1);
         blocks[b].setTail(a);
+        blocks[a].setHead(b);*/
+        
+        returnAllInitial(place, blocks, b);
+        
+        place[b].setTail(a);            
+        blocks[blocks[a].getHead()].setTail(-1);
         blocks[a].setHead(b);
+        
+        
         
     }
     
     
-    public static void pileAoverB(Block[] blocks, int a, int b){
-        int x = b;
+    public static void pileAoverB(Place[] place,Block[] blocks, int a, int b){
+        /*int x = b;
         
 
         while(true){
@@ -133,24 +177,43 @@ public class TheBlocksProblem {
                 
                 break;
             }
+        }*/
+        
+        if(place[b].hasNext()){
+            int x = place[b].next();       
+
+            while(true){
+                if(blocks[x].hasNext()){
+                    x = blocks[x].next();
+                }else{
+                    place[x].setTail(a);            
+                    blocks[blocks[a].getHead()].setTail(-1);
+                    blocks[a].setHead(x);           
+
+                    break;
+                }
+            }
+        }else{
+            place[b].setTail(a);            
+            blocks[blocks[a].getHead()].setTail(-1);
+            blocks[a].setHead(b);
         }
     }
 
-    private static void printAnswer(Block[] blocks) {
-        for(int i=0;i<blocks.length;i++){
-            System.out.print(i+": ");
-            
-            int x = i;
-            
-            if(blocks[x].getHead()== x){
-                System.out.print(" "+x);  
-            }else{
-                System.out.println("");
-                continue;
-            }
-            while(blocks[x].hasNext()){
-                x = blocks[x].next();
-                System.out.print(" "+x);                
+    private static void printAnswer(Place[] place ,Block[] blocks) {
+        for(int i=0;i<place.length;i++){
+            System.out.print(place[i].getName()+": ");
+
+            if(place[i].hasNext()){
+                int x = place[i].next();
+                while(true){
+                    System.out.print(blocks[x].getName()+" ");
+                    if(blocks[x].hasNext()){
+                        x = blocks[x].next();                        
+                    }else{
+                        break;
+                    }
+                }                
             }
             System.out.println("");
         }
@@ -169,6 +232,12 @@ class Block{
     private int name;
     private int head;
     private int tail;
+
+    public int getName() {
+        return name;
+    }
+    
+    
 
     public int getHead() {
         return head;
@@ -208,7 +277,48 @@ class Block{
     public int next(){
         return tail;
     }
+
     
+}
+
+class Place{
+    private int name;
+    private int tail;
+
+
+    Place(int name, int tail){
+        this.name = name;
+        this.tail = tail;
+    }
+
+    public int getName() {
+        return name;
+    }
+    
+
+    public int getTail() {
+        return tail;
+    }
+
+    public void setTail(int tail){
+        this.tail = tail;
+    }
+    
+    public void removeTail(){
+        this.tail = -1;
+    }
+    
+    public boolean hasNext(){
+        if(this.tail != -1){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    public int next(){
+        return tail;
+    }
 
     
 }
