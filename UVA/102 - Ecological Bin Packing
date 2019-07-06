@@ -1,4 +1,6 @@
+// Accepted 0.750s
 package ecological.bin.packing;
+
 
 import java.util.Scanner;
 
@@ -9,21 +11,67 @@ public class EcologicalBinPacking {
     public static void main(String[] args) {
         
         Scanner kb = new Scanner(System.in);
-        int n = 3;
-        String[] color = {"B", "C", "G"};
         
-
+        String color[] = {"BCG", "CBG", "GBC", "CGB", "GCB", "BGC"};         
+        /*
+        BCG
+        CBG
+        GBC
+        GCB
+        CGB
+        BGC
+        */
         while(kb.hasNext()){
-            int box[][] = new int[n][n];          
-            int[] left = {-1, -1, -1};
+            
+            int n = 3;
+            int value[] = new int[n+n];
+            
+            int B[]= new int[n]; 
+            int G[]= new int[n]; 
+            int C[]= new int[n]; 
             
             for(int i=0; i<n; i++){
-                for(int j=0;j<n;j++){
-                    box[i][j] = kb.nextInt();
+                B[i] = kb.nextInt();
+                G[i] = kb.nextInt();
+                C[i] = kb.nextInt();
+            }
+
+                                                                //012  
+            value[0] = B[1] + B[2] + G[0] + G[1] + C[0] + C[2]; //BCG
+            value[1] = B[0] + B[2] + G[0] + G[1] + C[2] + C[1]; //CBG
+            value[2] = B[0] + B[2] + G[2] + G[1] + C[0] + C[1]; //GBC
+            value[4] = B[1] + B[0] + G[2] + G[1] + C[0] + C[2]; //GCB ?? CGB
+            value[3] = B[1] + B[0] + G[0] + G[2] + C[1] + C[2]; //CGB ?? GCB
+            value[5] = B[1] + B[2] + G[0] + G[2] + C[0] + C[1]; //BGC
+            
+            int index = -1;
+            int min = Integer.MAX_VALUE;
+            
+            for(int i=0; i<n+n;i++){
+                if(value[i] < min){
+                    min = value[i];
+                    index = i;
                 }
             }
             
-            for(int i=0; i<n; i++){
+            System.out.println(color[index]+" "+min);
+            
+            
+            
+        }
+        
+    }
+    
+}
+/*input 
+
+1 2 3 4 5 6 7 8 9
+5 10 5 20 10 5 10 20 10
+
+*/
+
+/*
+for(int i=0; i<n; i++){
                 int fuck = box[i][1];
                 box[i][1] = box[i][2];
                 box[i][2] = fuck;
@@ -46,7 +94,7 @@ public class EcologicalBinPacking {
 
                         int temp = box[a][b] + box[c][b];
 
-                        //System.out.println("("+a+" "+b+") ("+c+" "+b+") FOR COLOR "+color[j]+ " sum = "+temp );
+                        System.out.println("("+a+" "+b+") ("+c+" "+b+") FOR COLOR "+color[j]+ " sum = "+temp );
 
                         if(temp < c_min){
                             c_min = temp;
@@ -57,7 +105,7 @@ public class EcologicalBinPacking {
                 }
                 
                 value += c_min;
-                //System.out.println("c_min = "+c_min+" "+color[index]);
+                System.out.println("c_min = "+c_min+" "+color[index]);
                 ans += color[index];
                 left[index] = 69;
                 
@@ -65,18 +113,4 @@ public class EcologicalBinPacking {
             }
             
             System.out.println(ans+" "+value);
-            
-            
-        }
-        
-    }
-    
-}
-/*input 
-
-1 2 3 4 5 6 7 8 9
-5 10 5 20 10 5 10 20 10
-
 */
-
-/* NOT ALPHABETICALLY */
