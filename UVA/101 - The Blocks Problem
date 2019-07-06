@@ -1,0 +1,214 @@
+//Working on it
+package theblocksproblem;
+
+import java.util.Scanner;
+
+public class TheBlocksProblem {
+    
+     public static void main(String[] args) {
+        
+         Scanner kb = new Scanner(System.in);
+         
+         int n = kb.nextInt();
+         
+         Block[] blocks = new Block[n];
+         
+         for(int i=0;i<n;i++){
+             blocks[i] = new Block(i);
+         }
+
+         
+         while(true){
+            String FC = kb.next();           
+
+            //System.out.println(FC+" "+a+" "+SC+" "+b);
+            
+            if(FC.equals("move")){
+                int a = kb.nextInt();
+                String SC = kb.next();
+                int b = kb.nextInt();
+                
+                if(SC.equals("onto")){
+                    moveAontoB(blocks, a, b);
+                    printAnswer(blocks);
+                    //printCheck(blocks);
+
+                }else if(SC.equals("over")){
+                    moveAoverB(blocks, a, b);
+                    printAnswer(blocks);
+                    //printCheck(blocks);
+                }
+            }else if(FC.equals("pile")){
+                int a = kb.nextInt();
+                String SC = kb.next();
+                int b = kb.nextInt();
+                
+                
+                if(SC.equals("onto")){
+                    
+                    pileAontoB(blocks, a, b);
+                    printAnswer(blocks);
+                    //printCheck(blocks);
+                }else if(SC.equals("over")){
+                    
+                    pileAoverB(blocks, a, b);
+                    printAnswer(blocks);
+                    //printCheck(blocks);
+                }
+            }else if(FC.equals("quit")){
+                printAnswer(blocks);
+                break;
+            }
+         
+         }
+        
+    }
+     
+    public static void returnAllInitial(Block[] blocks, int name){
+        if(blocks[name].hasNext()){           
+            returnAllInitial(blocks, blocks[name].next());
+        }
+        
+        blocks[name].setHead(name);
+        blocks[name].setTail(-1);
+    }
+    
+    public static void moveAontoB(Block[] blocks, int a, int b){
+        
+        returnAllInitial(blocks, a);
+        returnAllInitial(blocks, b);
+        
+        blocks[b].setTail(a);
+        blocks[a].setHead(b);        
+        
+    }
+    
+    
+    public static void moveAoverB(Block[] blocks, int a, int b){
+        returnAllInitial(blocks, a);
+        
+        int x = b;
+        while(true){
+            if(blocks[x].hasNext()){
+                x = blocks[x].next();
+            }else{
+                blocks[x].setTail(a);
+                blocks[a].setHead(x);
+                
+                break;
+            }
+        }
+    }
+    
+    
+    public static void pileAontoB(Block[] blocks, int a, int b){
+        
+        if(blocks[b].getHead() != b){
+            blocks[blocks[b].getHead()].setTail(-1);
+            blocks[b].setHead(b);
+            returnAllInitial(blocks, b);
+        }else{
+            returnAllInitial(blocks, b);
+        }
+        blocks[blocks[a].getHead()].setTail(-1);
+        blocks[b].setTail(a);
+        blocks[a].setHead(b);
+        
+    }
+    
+    
+    public static void pileAoverB(Block[] blocks, int a, int b){
+        int x = b;
+        
+
+        while(true){
+            if(blocks[x].hasNext()){
+                x = blocks[x].next();
+            }else{
+                
+                blocks[blocks[a].getHead()].setTail(-1);
+                
+                blocks[x].setTail(a);
+                blocks[a].setHead(x);               
+                
+                break;
+            }
+        }
+    }
+
+    private static void printAnswer(Block[] blocks) {
+        for(int i=0;i<blocks.length;i++){
+            System.out.print(i+": ");
+            
+            int x = i;
+            
+            if(blocks[x].getHead()== x){
+                System.out.print(" "+x);  
+            }else{
+                System.out.println("");
+                continue;
+            }
+            while(blocks[x].hasNext()){
+                x = blocks[x].next();
+                System.out.print(" "+x);                
+            }
+            System.out.println("");
+        }
+    }
+
+    private static void printCheck(Block[] blocks){
+        for(int i=0;i<blocks.length;i++){
+            
+            System.out.println(blocks[i].getHead()+"-["+i+"]-"+blocks[i].getTail());
+        }
+    }
+}
+
+class Block{
+
+    private int name;
+    private int head;
+    private int tail;
+
+    public int getHead() {
+        return head;
+    }
+
+    public int getTail() {
+        return tail;
+    }    
+    
+    
+    Block(int name){
+        this.head = name;
+        this.name = name;
+        this.tail = -1;
+    }
+    
+    public void setHead(int head){
+        this.head = head;
+    }
+    
+    public void setTail(int tail){
+        this.tail = tail;
+    }
+    
+    public void removeTail(){
+        this.tail = -1;
+    }
+    
+    public boolean hasNext(){
+        if(this.tail != -1){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    public int next(){
+        return tail;
+    }
+    
+
+    
+}
