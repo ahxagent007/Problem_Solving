@@ -1,0 +1,60 @@
+package the.skyline.problem;
+
+import java.util.Scanner;
+
+public class TheSkylineProblem {
+
+    public static void main(String[] args) {
+        
+        Scanner kb = new Scanner(System.in);
+        
+        int n = 10001;
+        
+        int[] line = new int[n];
+        
+        for(int i=0;i<n; i++){
+            line[i] = 0;
+        }
+        
+        while(kb.hasNext()){
+            int L = kb.nextInt();
+            //if(L == 0){break;}
+            int H = kb.nextInt();
+            int R = kb.nextInt();           
+            
+            
+            for(int i=L; i<R; i++){
+                if(line[i]<H){
+                    line[i] = H;
+                }
+            }
+            
+                       
+        }
+        
+        /*for(int i=0;i<30; i++){
+                System.out.println(i+": "+line[i]);
+        }*/
+        
+        boolean started = false;
+        
+        for(int i=0;i<n; i++){
+            if(!started){
+                if(line[i] != 0){
+                    started = true;
+                }
+            }
+            
+            if(started){
+                if(line[i-1] != line[i]){
+                    System.out.print(i+" "+line[i]+" ");
+                }
+            }
+        }         
+        
+        
+        
+    }
+    
+}
+//1 11 5 2 6 7 3 13 9 12 7 16 14 3 25 19 18 22 23 13 29 24 4 28
