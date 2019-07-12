@@ -1,0 +1,50 @@
+package uva_272_tex.quotes;
+import java.util.Scanner;
+public class UVA_272_TEXQuotes {
+
+
+    public static void main(String[] args) {
+        
+        Scanner kb = new Scanner(System.in);
+        String input = "";
+        boolean first = true;
+        
+        while(kb.hasNext()){
+            
+            String token = kb.nextLine();
+            input = token;
+            
+            /*if(token.charAt(token.length()-1) == '\u001a'){
+                break;
+            }*/
+            
+            /*if(token.charAt(token.length()-1) == '0'){
+                break;
+            }*/
+            
+            String output = "";
+            
+
+            for(int i=0; i<input.length(); i++){
+
+                if(input.charAt(i) == '\"'){
+                    if(first){
+                        output += "``";
+                        first = false;
+                    }else{
+                        output += "''";
+                        first = true;
+                    }
+                }else{
+                    output += input.charAt(i);
+                }
+            }
+
+            System.out.println(output);
+            
+        }
+
+        
+    }
+    
+}
